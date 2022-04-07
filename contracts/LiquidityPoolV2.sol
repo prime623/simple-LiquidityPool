@@ -45,16 +45,19 @@ contract Pool3 {
         owner = msg.sender;
     }
 
-    function initialize(uint256 _amount0, uint256 _amount1) external {
+    function initialize(uint256 _amount0, uint256 _amount1) external lock {
         require(token0.allowance(msg.sender, address(this)) >= _amount0 && 
         token1.allowance(msg.sender, address(this)) >= _amount1, "Insufficient allowance");
+
+        reserve0 += _amount0;
+        reserve1 += _amount1;
+
         token0.transferFrom(msg.sender, address(this), _amount0);
         token1.transferFrom(msg.sender, address(this), _amount1);
         balances[1][msg.sender] = token0.balanceOf(msg.sender);
         balances[2][msg.sender] = token1.balanceOf(msg.sender);
 
-        reserve0 += _amount0;
-        reserve1 += _amount1;
+        
 
         if(k == 0) {
            k = _amount0 * _amount1;
@@ -128,16 +131,18 @@ contract Pool4 {
         owner = msg.sender;
     }
 
-    function initialize(uint256 _amount0, uint256 _amount1) external {
+    function initialize(uint256 _amount0, uint256 _amount1) external lock {
         require(token0.allowance(msg.sender, address(this)) >= _amount0 && 
         token1.allowance(msg.sender, address(this)) >= _amount1, "Insufficient allowance");
+        
+        reserve0 += _amount0;
+        reserve1 += _amount1;
+        
         token0.transferFrom(msg.sender, address(this), _amount0);
         token1.transferFrom(msg.sender, address(this), _amount1);
         balances[1][msg.sender] = token0.balanceOf(msg.sender);
         balances[2][msg.sender] = token1.balanceOf(msg.sender);
 
-        reserve0 += _amount0;
-        reserve1 += _amount1;
 
         if(k == 0) {
            k = _amount0 * _amount1;
